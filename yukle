@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# shared library
+sudo apt-get install -y libdmtx0b

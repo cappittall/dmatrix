@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# pre cleaning
+sudo systemctl stop dmatrix
+sudo systemctl daemon-reload
+
+sleep 0.5
+
+sudo cp srv/dmatrix.sh /usr/bin/
+sudo cp srv/dmatrix.service /etc/systemd/system/
+sudo cp srv/baslat /usr/bin/
+
+sudo chmod +x /usr/bin/dmatrix.sh
+sudo chmod +x /usr/bin/baslat
+
+sleep 0.1
+sudo systemctl daemon-reload
+
+sleep 0.1
+sudo systemctl enable dmatrix.service

@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>report_OK_05417257_2022-03-30_00_18_57_jpg.rf.b7e0b5b5c9e71c1ccb9e12fb801e84ca.jpg</filename>
+	<path>report_OK_05417257_2022-03-30_00_18_57_jpg.rf.b7e0b5b5c9e71c1ccb9e12fb801e84ca.jpg</path>
+	<source>
+		<database>roboflow.com</database>
+	</source>
+	<size>
+		<width>1396</width>
+		<height>1042</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>433</xmin>
+			<xmax>632</xmax>
+			<ymin>478</ymin>
+			<ymax>683</ymax>
+		</bndbox>
+	</object>
+</annotation>

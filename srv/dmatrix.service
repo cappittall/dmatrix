@@ -1,0 +1,10 @@
+[Unit]
+Description=Data matrix Service
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dmatrix.sh
+
+[Install]
+WantedBy=multi-user.target

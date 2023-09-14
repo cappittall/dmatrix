@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="static/img/favicon.png">
+    <title>Farmakod Data Matrix YZ kontrolu</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .image-container {
+            position: relative;
+            height: 100%;
+            /*background-image: url('static/img/background.png'); /* Replace with the path to your image */
+            background-color: rgb(239, 245, 244) ;
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            position: relative;
+            justify-content:center;
+            width: 60%;
+        }
+        /* Additional CSS for styling */
+        .input-container {
+            padding: 20px;
+        }
+        
+        label {
+            color: blueviolet;
+            font-size: 20px;
+        }
+
+        .slider-value {
+            color: blueviolet;
+            font-size: 20px;
+        }
+
+        .message-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            color:white;
+            background-color: rgb(129, 177, 19);
+            text-align: center;
+        }
+
+       /* Styling for the "Git pull" button */
+       .git-pull-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: red;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        text-decoration: none; /* Remove underline */
+        border-radius: 5px;
+        font-size: 20px;
+    }
+
+        .git-pull-button:hover {
+            background-color: darkred;
+        }
+        .logo {
+            top:0;
+            left:10px;
+            width: 120px;
+            height: 120px;
+            background-color: transparent;
+
+        }
+        .dmatrix {
+            position: fixed;
+            width: 250px;
+            height: 50px;
+            top:200px;
+            right: 350px;
+        }
+    </style>
+</head>
+<body>
+    <div class="image-container">
+        <a href="#" class="btn btn-danger git-pull-button" id="gitPullButton">Git pull</a>
+        <a href="https://farmakod.com/" target="_blank" class="btn btn-danger git-pull-button logo" id="gitPullButton"><img src="static/img/favicon.png"/></a>
+        <!-- <img class = "dmatrix" src="static/img/dmatrix.png"> -->
+        <div class="container input-container">
+            <form action="/update/" method="post">
+                <div class="form-group">
+                    <label for="modelSelect">Model Seçiniz :</label>
+                    <select class="form-control" id="modelSelect" name="selected_model">
+                        {% for m in models %}
+                            <option  {% if m == model %} selected {% endif %} >{{ m }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="thresholdSlider">Model Hassasiyeti :</label>
+                    <input type="range" class="form-control-range" id="thresholdSlider" name="threshold" min="0" max="1" step="0.1" value="{{ threshold }}">
+                    <div class="slider-value" id="sliderValue">{{ threshold * 100 }}</div> <!-- Value displayer -->
+                    
+                </div>
+                <button type="submit" class="btn btn-primary"> Gönder </button>
+            </form>
+        </div>
+
+        {% if message %} 
+            <div class="message-container"> {{ message }}</div> 
+        {% endif %} 
+    </div>
+    <script>
+        // JavaScript to update the value displayer as the slider changes
+        const thresholdSlider = document.getElementById('thresholdSlider');
+        const sliderValue = document.getElementById('sliderValue');
+
+        thresholdSlider.addEventListener('input', () => {
+            sliderValue.innerText = thresholdSlider.value * 100;
+        });
+
+        setTimeout(()=> {
+            document.querySelector('.message-container').style.display="none";
+            let currentURL = window.location.href;
+            // Check if there is a '?' character in the URL
+            if (currentURL.includes('?')) {
+                // Remove everything after the '?' character
+                currentURL = currentURL.split('?')[0];
+                // Optionally, you can update the URL in the browser without a page reload
+                window.history.replaceState({}, document.title, currentURL);
+            }
+        }, 5000);
+
+         // JavaScript to handle the "Git pull" button click
+         const gitPullButton = document.getElementById('gitPullButton');
+         gitPullButton.addEventListener('click', async () => {
+             // Send a request to the server to perform "git pull" and restart the app
+             try {
+                 const response = await fetch('/gitpull', { method: 'POST' });
+                 if (response.status === 200) {
+                     // Reload the page to restart the app
+                     location.reload();
+                 } else {
+                     console.error('Git pull failed.');
+                 }
+             } catch (error) {
+                 console.error('An error occurred while performing git pull:', error);
+             }
+         });
+
+
+    </script>
+</body>
+</html>
+
+

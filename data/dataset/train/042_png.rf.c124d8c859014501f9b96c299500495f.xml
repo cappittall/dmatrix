@@ -1,0 +1,27 @@
+<annotation>
+	<folder></folder>
+	<filename>042_png.rf.c124d8c859014501f9b96c299500495f.jpg</filename>
+	<path>042_png.rf.c124d8c859014501f9b96c299500495f.jpg</path>
+	<source>
+		<database>roboflow.com</database>
+	</source>
+	<size>
+		<width>1206</width>
+		<height>678</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>882</xmin>
+			<xmax>927</xmax>
+			<ymin>403</ymin>
+			<ymax>448</ymax>
+		</bndbox>
+	</object>
+</annotation>

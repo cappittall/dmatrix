@@ -1,0 +1,79 @@
+<annotation>
+	<folder></folder>
+	<filename>image-2022-02-15_15-49-22_10000006_bmp.rf.9ce8b660a594a2ecbf7a38e532d2c19b.jpg</filename>
+	<path>image-2022-02-15_15-49-22_10000006_bmp.rf.9ce8b660a594a2ecbf7a38e532d2c19b.jpg</path>
+	<source>
+		<database>roboflow.com</database>
+	</source>
+	<size>
+		<width>1984</width>
+		<height>650</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>851</xmin>
+			<xmax>865</xmax>
+			<ymin>104</ymin>
+			<ymax>121</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>676</xmin>
+			<xmax>689</xmax>
+			<ymin>166</ymin>
+			<ymax>184</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>876</xmin>
+			<xmax>891</xmax>
+			<ymin>244</ymin>
+			<ymax>262</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>934</xmin>
+			<xmax>949</xmax>
+			<ymin>317</ymin>
+			<ymax>336</ymax>
+		</bndbox>
+	</object>
+	<object>
+		<name>data matrix</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<occluded>0</occluded>
+		<bndbox>
+			<xmin>1002</xmin>
+			<xmax>1018</xmax>
+			<ymin>391</ymin>
+			<ymax>410</ymax>
+		</bndbox>
+	</object>
+</annotation>
