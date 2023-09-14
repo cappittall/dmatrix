@@ -1,4 +1,3 @@
-from collections import namedtuple
 import subprocess
 import time
 import os
