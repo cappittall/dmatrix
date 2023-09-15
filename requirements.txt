@@ -1,5 +1,6 @@
 uvicorn
 fastapi
-opencv-python-headless
-tflite_runtime
+opencv-python
+jinja2
+python-multipart
 pylibdmtx

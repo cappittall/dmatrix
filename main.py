@@ -15,9 +15,10 @@ from io import BytesIO
 import base64
 import logging
 
+
 from tools.model_processor import ModelProcessor
 from tools.decoder import DataMatrixDecoder
-from tflite_runtime.interpreter import load_delegate
+
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI()
@@ -29,15 +30,15 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 import platform
 
     
-system_name = platform.system()
+"""system_name = platform.system()
 delegate = 'libedgetpu.so.1' if system_name == "Linux" else "libedgetpu.dll" \
                                 if system_name =="Windows" else None
 
 try: 
     EDGE = True
     load_delegate(load_delegate(delegate))
-except: 
-    EDGE = False
+except: """
+EDGE = False
     
     
 # set static vars.
@@ -46,6 +47,7 @@ model = "data-matrix-v0_edgetpu.tflite" if EDGE else "data-matrix-v0.tflite"
 message=''
 class_names = ['D.Matrix', '???']
 threshold_file = Path("data/system/threshold.txt")
+
 
 # set initial detector
 # Read the threshold value from the file

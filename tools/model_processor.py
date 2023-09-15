@@ -5,14 +5,21 @@ import cv2
 import numpy as np
 from typing import Tuple
 import os
-
 from collections import namedtuple
 
-from tflite_runtime.interpreter import load_delegate, Interpreter
+import tensorflow as tf
+load_delegate = tf.lite.experimental.load_delegate
+Interpreter = tf.lite.Interpreter
+
+
+#from tflite_runtime.interpreter import load_delegate, Interpreter
 # import tensorflow as tf  
 
-from pycoral.adapters.detect import get_objects
-from pycoral.utils.edgetpu import run_inference
+# from pycoral.adapters.detect import get_objects
+#from pycoral.utils.edgetpu import run_inference
+
+get_objects=None
+run_inference=None
 
 DetectedObject = namedtuple('DetectedObject', ['bbox', 'class_id', 'score'])
 

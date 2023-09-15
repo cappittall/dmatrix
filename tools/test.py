@@ -1,3 +1,4 @@
+import json
 import requests
 import time
 import glob
@@ -12,7 +13,15 @@ def start():
         data = {'image': (fn, open(file, 'rb'))}
         start_t= time.monotonic()
         response = requests.post('http://127.0.0.1:8000/upload/', files=data)
-        response_content = response.json()
+        
+        if response.status_code == 200:
+            try:
+                response_content = response.json()
+            except json.JSONDecodeError:
+                print(f"Hata: Response text: {response.text}")
+        else:
+            print(f"Hata: Status code: {response.status_code}, Response text: {response.text}")
+
         print(f'Time {(time.monotonic() - start_t)*1000:.0f} ', response_content['DataMatrix'])
         
         # Save the response to the disk
