@@ -29,15 +29,6 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 import platform
 
-    
-"""system_name = platform.system()
-delegate = 'libedgetpu.so.1' if system_name == "Linux" else "libedgetpu.dll" \
-                                if system_name =="Windows" else None
-
-try: 
-    EDGE = True
-    load_delegate(load_delegate(delegate))
-except: """
 EDGE = False
     
     
