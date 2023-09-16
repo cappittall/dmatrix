@@ -12,18 +12,25 @@ def start():
         data = {'image': (fn, open(file, 'rb'))}
         start_t= time.monotonic()
         response = requests.post('http://127.0.0.1:8000/upload/', files=data)
-        response_content = response.json()
-        print(f'Time {(time.monotonic() - start_t)*1000:.0f} ', response_content['DataMatrix'])
-        
-        # Save the response to the disk
-        image_data = base64.b64decode(response_content['file'])
-        
-        output_filepath = Path('data/results') / Path(file).name
-        output_filepath.parent.mkdir(parents=True, exist_ok=True)
-        
-        with open(output_filepath, 'wb') as f:
-            f.write(image_data)
+               
+
+        try:
+            json_data = response.json()  # Try to decode the response content as JSON
+
+            print(f'Time {(time.monotonic() - start_t)*1000:.0f} ',json_data['DataMatrix'])
             
+            # Save the response to the disk
+            image_data = base64.b64decode(json_data['file'])
+            
+            output_filepath = Path('data/rsts') / Path(file).name
+            output_filepath.parent.mkdir(parents=True, exist_ok=True)
+            
+            with open(output_filepath, 'wb') as f:
+                f.write(image_data) 
+                
+        except requests.exceptions.JSONDecodeError:
+            print("Failed to decode response content as JSON")  # 
+                
    
 if __name__=="__main__":
     start()

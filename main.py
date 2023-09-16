@@ -2,6 +2,7 @@ import subprocess
 import time
 import os
 from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import FastAPI, Form, Request, UploadFile
 from fastapi.responses import RedirectResponse
@@ -59,8 +60,7 @@ else:
 detector = ModelProcessor(os.path.join(models_path, model), threshold = threshold)
 detector.interpreter.allocate_tensors()
 
-# Create an instance of DataMatrixDecoder
-decoder = DataMatrixDecoder()
+
 
 def object_detection(image: np.ndarray):
     """
@@ -72,36 +72,54 @@ def object_detection(image: np.ndarray):
     height, width, _ = image.shape
     
     # Create a list to store the final object details
-    final_objects = []
     DataMatrix = {}
+
+    # Preparing list for storing cropped images and their bounding boxes
+    cropped_images = []
+    bounding_boxes = []
+
     for i, obj in enumerate(objs):
         # Convert coordinates from relative to absolute
         x_min, y_min, x_max, y_max = obj.bbox 
-        x1, y1, x2, y2 = ( int(xy) for xy in [(x_min * width), 
-                                              (y_min * height), 
-                                              (x_max * width), 
-                                              (y_max * height)])
-        
-        confidence = obj.score       
-         # Draw a number on each bounding box
-        cv2.putText(image, str(i+1), (x1, y1 - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+        x1, y1, x2, y2 = (int(xy) for xy in [(x_min * width), 
+                                             (y_min * height), 
+                                             (x_max * width), 
+                                             (y_max * height)])
         
         # Crop the image (10% wider)
         dx = int(0.1 * (x2 - x1))
         dy = int(0.1 * (y2 - y1))
         cropped_image = image[max(y1-dy,0):min(y2+dy,height), max(x1-dx,0):min(x2+dx,width)]
         
-        # Decode data matrix in the cropped image
-        decoded_data = decoder.decode_image(cropped_image)
-        (color, data) = ((0, 255, 0), str(decoded_data[0].get('data',None))) if decoded_data else ((0,0,255), [])
-     
-        print('decoded_data', data) 
+        # Storing cropped images and their bounding boxes for sorting
+        cropped_images.append(cropped_image)
+        bounding_boxes.append(((x1, y1, x2, y2), i, obj.score))
+
+    # Sorting bounding boxes top-down, then left-right
+    bounding_boxes.sort(key=lambda x: (x[0][1], x[0][0]))
+
+    with ThreadPoolExecutor() as executor:
+        future_results = [executor.submit(DataMatrixDecoder.decode_image, (i, cropped_image)) 
+                          for i, cropped_image in enumerate(cropped_images)]
+    
+    
+    for i, (bbox, original_idx, score) in enumerate(bounding_boxes):
+        decoded_data = future_results[original_idx].result()
+        x1, y1, x2, y2 = bbox
+        
+        (color, data) = ((0, 255, 0), str(decoded_data.get('data',None))) if decoded_data else ((0,0,255), [])
+        
+        print('decoded_data', data)
         cv2.rectangle(image, (x1, y1), (x2, y2), color, 2)
         
-        DataMatrix[str(i+1)] = {"bbox": [x1,y1,x2,y2], "datamatrix":data, "dy": f"{int(confidence*100)}%" }
+        # Draw a number on each bounding box
+        cv2.putText(image, str(i+1), (x1, y1 - 20), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+        
+        DataMatrix[str(i+1)] = {"bbox": [x1,y1,x2,y2], "datamatrix": data, "dy": f"{int(score*100)}%" }
         
     return image, DataMatrix
 
+#
 # Update the main page endpoint
 @app.get("/")
 async def main(request: Request,  message: str = ''):
@@ -170,8 +188,7 @@ async def upload_image(image: UploadFile = Form(...)):
     
     img_np, data_matrix = object_detection(img_np.copy())
     
-    imname = img_name.split('.')[0]
-    cv2.imwrite(f'data/results/{imname}.jpg', img_np)
+    cv2.imwrite(f'data/results/{img_name}', img_np)
     
     # Convert the image with bbox back to bytes
     _, buffer = cv2.imencode(".tif", img_np)
