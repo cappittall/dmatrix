@@ -8,7 +8,9 @@ class DataMatrixDecoder:
     def decode_image(args):
         index, image = args
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        barcodes = decode(gray_image, max_count=1)
+        ret,thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
+        
+        barcodes = decode(thresh, max_count=1)
         if barcodes:
             rect = barcodes[0].rect
             barcode_data = barcodes[0].data.decode("utf-8")
