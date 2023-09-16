@@ -119,7 +119,6 @@ def object_detection(image: np.ndarray):
         
     return image, DataMatrix
 
-#
 # Update the main page endpoint
 @app.get("/")
 async def main(request: Request,  message: str = ''):
